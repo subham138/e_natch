@@ -131,7 +131,7 @@ $(document).ready(function() {
             },
             "consumerData": {
                 "deviceId": "WEBSH2",    //possible values "WEBSH1" or "WEBSH2"
-                "token": $('#token').val(),//"042a2fbf02f7cd9cd60d5c9f47c21fc365dff713079ba788d110d53514bed119d946f5776b6e67952784a61e1749e79d004c7871dc3224805e240cd552462cca",
+                "token": $('#token').val().toString(),//"042a2fbf02f7cd9cd60d5c9f47c21fc365dff713079ba788d110d53514bed119d946f5776b6e67952784a61e1749e79d004c7871dc3224805e240cd552462cca",
                 "returnUrl": "https://pgproxyuat.in.worldline-solutions.com/linuxsimulator/MerchantResponsePage.jsp",    //merchant response page URL
                 "responseHandler": handleResponse,
                 "paymentMode": "netBanking",
@@ -144,7 +144,7 @@ $(document).ready(function() {
                 "txnId": $('#tnxId').val(),//"1698643446222",   //Unique merchant transaction ID
                 "items": [{
                     "itemId": "first",
-                    "amount": "1",
+                    "amount": $('#reg_amt').val(),
                     "comAmt": "0"
                 }],
                 "customStyle": {
@@ -157,13 +157,54 @@ $(document).ready(function() {
                 //"accountHolderName": "Name",  //Pass this if accountHolderName is captured at merchant side for ICICI eMandate & eNACH registration this is mandatory field, if not passed from merchant Customer need to enter in Checkout UI.
                 //"ifscCode": "ICIC0000001",        //Pass this if ifscCode is captured at merchant side.
                 "accountType": "Saving",  //Required for eNACH registration this is mandatory field
-                "debitStartDate": $('#strt_dt').val(),//"10-03-2019",
-                "debitEndDate": $('#end_dt').val(),//"01-03-2047",
+                "debitStartDate": formatDate($('#strt_dt').val()),//"10-03-2019",
+                "debitEndDate": formatDate($('#end_dt').val()),//"01-03-2047",
                 "maxAmount": $('#bebit_amt').val(),//"100",
                 "amountType": $('#amt_type').val(),//"M",
                 "frequency": "MNTH" //"ADHO"    //  Available options DAIL, WEEK, MNTH, QURT, MIAN, YEAR, BIMN and ADHO
             }
         };
+
+        // var reqJson = {
+        //     "features": {
+        //         "enableAbortResponse": true,
+        //         "enableExpressPay": true,
+        //         "enableMerTxnDetails": true,
+        //         "siDetailsAtMerchantEnd": true,
+        //         "enableSI": true
+        //     },
+        //     "consumerData": {
+        //         "deviceId": "WEBSH2",    //possible values "WEBSH1" or "WEBSH2"
+        //         "token": "68c23fab171b3a648ff37e31f2ab1e96105310600bd4407cded3b6cea22eb1fc7627afc0832b98a18ece81dee3d7ecd9fd99de98fb4d7a3f59369042096b27c7",
+        //         "returnUrl": "https://pgproxyuat.in.worldline-solutions.com/linuxsimulator/MerchantResponsePage.jsp",
+        //         "responseHandler": handleResponse,
+        //         "paymentMode": "netBanking",
+        //         "merchantLogoUrl": "https://www.paynimo.com/CompanyDocs/company-logo-vertical.png",
+        //         "merchantId": "T1016979",
+        //         "currency": "INR",
+        //         "consumerId": "c964634",  //Your unique consumer identifier to register a eMandate/eNACH
+        //         "txnId": "1708068755987",   //Unique merchant transaction ID
+        //         "items": [{
+        //             "itemId": "first",
+        //             "amount": "1",
+        //             "comAmt": "0"
+        //         }],
+        //         "customStyle": {
+        //             "PRIMARY_COLOR_CODE": "#45beaa",   //merchant primary color code
+        //             "SECONDARY_COLOR_CODE": "#FFFFFF",   //provide merchant's suitable color code
+        //             "BUTTON_COLOR_CODE_1": "#2d8c8c",   //merchant's button background color code
+        //             "BUTTON_COLOR_CODE_2": "#FFFFFF"   //provide merchant's suitable color code for button text
+        //         },
+        //         "accountType": "Saving",  //Required for eNACH registration this is mandatory field
+        //         "debitStartDate": formatDate($('#strt_dt').val()),
+        //         "debitEndDate": formatDate($('#end_dt').val()),
+        //         "maxAmount": $('#bebit_amt').val(),
+        //         "amountType": "M",
+        //         "frequency": "ADHO"    //  Available options DAIL, WEEK, MNTH, QURT, MIAN, YEAR, BIMN and ADHO
+        //     }
+        // };
+
+        console.log(reqJson);
 
         $.pnCheckout(reqJson);
         if(reqJson.features.enableNewWindowFlow){
@@ -171,6 +212,14 @@ $(document).ready(function() {
         }
     });
 });
+
+    function formatDate(inputDate) {
+        const date = new Date(inputDate);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${day}-${month}-${year}`;
+    }
 </script>
 <script>
     function setStrtDate(){

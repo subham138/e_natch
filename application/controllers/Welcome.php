@@ -36,7 +36,7 @@ class Welcome extends CI_Controller {
 		$merchantId = MERCHANT_CODE;
 		// var_dump($data);exit;
 		$dt = $merchantId.'|'.$data["tnxId"].'|'.(int)$data["reg_amt"].'||'.$data["consumer_id"].'|'.$data["mobile_no"].'|'.$data["email"].'|'.date('d-m-Y', strtotime($data["strt_dt"])).'|'.date('d-m-Y', strtotime($data["end_dt"])).'|'.$data["bebit_amt"].'|'.$data["amt_type"].'|MNTH|||||'.$saltKey.'';
-		echo $dt;exit;
+		// echo $dt;exit;
 		echo hash('sha512', $dt);
 	}
 }
