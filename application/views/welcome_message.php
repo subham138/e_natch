@@ -19,8 +19,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-4">
-                                <label for="consumer_id" class="form-label">Consumer ID <span class="text-danger">*</span></label>
+                                <label for="consumer_id" class="form-label">Loan ID <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="consumer_id" name="consumer_id" placeholder="Enter your consumer id">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="cust_name" class="form-label">Consumer Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="cust_name" name="cust_name" placeholder="Enter your consumer Name">
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -108,6 +112,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $(document).ready(function() {
     setStrtDate();
     function handleResponse(res) {
+        console.log(res);
         if (typeof res != "undefined" && typeof res.paymentMethod != "undefined" && typeof res.paymentMethod.paymentTransaction != "undefined" && typeof res.paymentMethod.paymentTransaction.statusCode != "undefined" && res.paymentMethod.paymentTransaction.statusCode == "0300") {
             // success block
         } else if (typeof res != "undefined" && typeof res.paymentMethod != "undefined" && typeof res.paymentMethod.paymentTransaction != "undefined" && typeof res.paymentMethod.paymentTransaction.statusCode != "undefined" && res.paymentMethod.paymentTransaction.statusCode == "0398") {
@@ -132,7 +137,7 @@ $(document).ready(function() {
             "consumerData": {
                 "deviceId": "WEBSH2",    //possible values "WEBSH1" or "WEBSH2"
                 "token": $('#token').val().toString(),//"042a2fbf02f7cd9cd60d5c9f47c21fc365dff713079ba788d110d53514bed119d946f5776b6e67952784a61e1749e79d004c7871dc3224805e240cd552462cca",
-                "returnUrl": "https://pgproxyuat.in.worldline-solutions.com/linuxsimulator/MerchantResponsePage.jsp",    //merchant response page URL
+                "returnUrl": "<?= site_url() ?>/welcome/get_response?loan_id="+$('#consumer_id').val()+"&cust_id="+$('#cust_id').val(), //"https://pgproxyuat.in.worldline-solutions.com/linuxsimulator/MerchantResponsePage.jsp",    //merchant response page URL
                 "responseHandler": handleResponse,
                 "paymentMode": "netBanking",
                 "merchantLogoUrl": "https://www.wbscardb.com/wp-content/themes/WBSCARDB-child/assets/images/logo.png",  //provided merchant logo will be displayed
@@ -220,6 +225,14 @@ $(document).ready(function() {
         const day = String(date.getDate()).padStart(2, '0');
         return `${day}-${month}-${year}`;
     }
+
+    function formatDateYMD(inputDate) {
+        const date = new Date(inputDate);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
 </script>
 <script>
     function setStrtDate(){
@@ -254,13 +267,31 @@ $(document).ready(function() {
 				$('#token').val(result)
 				$('#btnSubmit').show();
 				$('#processBtn').hide()
-			// var result = $.parseJSON(result);
-			// if (result[0].sanction_amt > 0) {
-			//     $('#view_sanc').show();
-			//     $('#sanc_amt').text(result[0].sanction_amt);
-			// } else {
-			//     alert("No Sanction Limit Is Assigned");
-			// }
+		    }
+		});
+	})
+
+    $('#consumer_id').on('change', function(){
+		$.ajax({
+		    type: "GET",
+		    url: "<?= site_url('/welcome/test'); ?>",
+		    data: {loan_id: $(this).val()},
+		    dataType: 'html',
+		    success: function (result) {
+                try{
+                    var res = JSON.parse(result)
+                    $('#cust_id').val(res.CUST_CD ? res.CUST_CD : '')
+                    $('#cust_name').val(res.CUST_NAME ? res.CUST_NAME : '')
+                    $('#email').val(res.EMAIL ? res.EMAIL : '')
+                    $('#mobile_no').val(res.PHONE ? res.PHONE : '')
+                    $('#bebit_amt').val(10)
+                    $('#reg_amt').val(res.REG_AMT ? res.REG_AMT : '')
+                    $('#strt_dt').val(formatDateYMD(res.FIRST_DUE_DT))
+                    $('#end_dt').val(formatDateYMD(res.DEBIT_END_DT))
+                    console.log(result);
+                }catch(err){
+                    console.log(err);
+                }
 		    }
 		});
 	})
