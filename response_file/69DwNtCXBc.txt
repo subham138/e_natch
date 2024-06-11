@@ -1,0 +1,1 @@
+{"loan_id":"103395","cust_id":"1031132","tnx_id":"69DwNtCXBc","msg":"0392|User Aborted|Hash_Validation_fail|69DwNtCXBc||E36872443|10|{itc:}{email:}{mob:}|11-06-2024 12:53:15|NA||||||99c1580f62ef81ad7da3dcdddc77bba48a86a77f957d245677c14f6e75feea94368f10e6d171b2750615513a8cdee0f0e1fe409b458c826f8dd6e758698e0bdf"}

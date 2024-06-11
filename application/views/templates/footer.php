@@ -18,7 +18,6 @@
     <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- plugins:js -->
   <script src="<?= base_url() ?>assets/vendors/js/vendor.bundle.base.js"></script>
   <!-- endinject -->
@@ -40,14 +39,11 @@
   <script src="<?= base_url() ?>assets/js/dashboard.js"></script>
   <script src="<?= base_url() ?>assets/js/Chart.roundedBarCharts.js"></script>
   <!-- End custom js for this page-->
+
   <script>
-    triggerSweetAlert(){
-      Swal.fire({
-        title: "The Internet?",
-        text: "That thing is still around?",
-        icon: "question"
-      });
-    }
+    $(document).ready(function(){
+      $('.date-table').DataTable();
+    })
   </script>
 </body>
 

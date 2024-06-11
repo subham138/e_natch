@@ -60,3 +60,5 @@ $route['emandate'] = 'mandate/entry';
 $route['generate_token'] = 'mandate/generate_token';
 $route['get_user_data'] = 'mandate/get_user_data';
 $route['tnx_resp'] = 'mandate/get_tnx_response';
+$route['emv_view'] = 'mandate_verify/show_mandate_entry';
+

@@ -20,10 +20,23 @@
     <link rel="stylesheet" href="<?= base_url() ?>assets/vendors/mdi/css/materialdesignicons.min.css">
   <!-- inject:css -->
   <link rel="stylesheet" href="<?= base_url() ?>assets/css/vertical-layout-light/style.css">
-  <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom-style.css">
   <!-- endinject -->
   <link rel="shortcut icon" href="<?= base_url() ?>assets/images/favicon.png" />
+  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.1/dist/sweetalert2.all.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.1/dist/sweetalert2.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom-style.css">
 </head>
+
+<script>
+  function triggerSweetAlert(title, msg, status){
+    Swal.fire({
+      title: title,
+      text: msg,
+      icon: status
+    });
+  }
+</script>
 
 <body>
     <div class="container-scroller">

@@ -1,11 +1,8 @@
-<div class="row">
-    <div class="col-md-12">
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-          <strong>Holy guacamole!</strong> You should check in on some of those fields below.
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    </div>
-</div>
+<?php if ($this->session->flashdata('msg')) { ?>
+    <script>
+        triggerSweetAlert("<?= $this->session->flashdata('title') ?>", "<?= $this->session->flashdata('msg') ?>", "<?= $this->session->flashdata('status') ?>")
+    </script>
+<?php } ?>
 <div class="row">
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
@@ -106,9 +103,9 @@ $(document).ready(function() {
             "consumerData": {
                 "deviceId": "WEBSH2",    //possible values "WEBSH1" or "WEBSH2"
                 "token": $('#token').val().toString(),
-                "returnUrl": "<?= site_url() ?>/welcome/get_response?loan_id="+$('#consumer_id').val()+"&cust_id="+$('#cust_id').val(),
+                "returnUrl": "<?= site_url() ?>/tnx_resp?loan_id="+$('#consumer_id').val()+"&cust_id="+$('#cust_id').val()+"&tnx_id=<?= $tnxId ?>",
                 "responseHandler": handleResponse,
-                "paymentMode": "netBanking",
+                "paymentMode": "all",
                 "merchantLogoUrl": "https://www.wbscardb.com/wp-content/themes/WBSCARDB-child/assets/images/logo.png",  //provided merchant logo will be displayed
                 "merchantId": "T1016979",
                 "currency": "INR",

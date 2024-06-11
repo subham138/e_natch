@@ -9,3 +9,7 @@
     /* width: 32px; */
     margin: auto;
 }
+
+.swal2-modal .swal2-icon, .swal2-modal .swal2-success-ring {
+    margin-bottom: 0px !important;
+}
