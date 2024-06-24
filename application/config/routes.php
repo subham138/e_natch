@@ -60,5 +60,9 @@ $route['emandate'] = 'mandate/entry';
 $route['generate_token'] = 'mandate/generate_token';
 $route['get_user_data'] = 'mandate/get_user_data';
 $route['tnx_resp'] = 'mandate/get_tnx_response';
+$route['manreg'] = 'mandate/mandate_entry_outside';
 $route['emv_view'] = 'mandate_verify/show_mandate_entry';
+$route['get_tnx_dtls'] = 'mandate_verify/get_tnx_details';
+$route['man_report'] = 'report/transaction_report';
+$route['man_report_by_flag/(:any)'] = 'report/get_transaction_data_ajax/$1';
 

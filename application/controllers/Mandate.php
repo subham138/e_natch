@@ -13,7 +13,8 @@ class Mandate extends CI_Controller {
 
         $data = array(
             'header' => 'eMandate Registration',
-			'tnxId' => $txnId
+			'tnxId' => $txnId,
+			'flag' => 'I'
         );
 
         $this->template->load('eMandate/entry', $data);
@@ -43,13 +44,19 @@ class Mandate extends CI_Controller {
 			"flag" => 0
 		);
 
+		// FOR ENCODING DATA SEND
 		// Convert the JSON string to a buffer
-		$buffer = utf8_encode(json_encode($data_arr));
+		// $buffer = utf8_encode(json_encode($data_arr));
 
-		$hexBuffer = bin2hex($buffer);
+		// $hexBuffer = bin2hex($buffer);
+
+		// $req_data = array(
+		// 	"data" => $hexBuffer
+		// );
+		// END
 
 		$req_data = array(
-			"data" => $hexBuffer
+			"data" => $data_arr
 		);
 
 		$curl = curl_init();
@@ -75,11 +82,14 @@ class Mandate extends CI_Controller {
 		curl_close($curl);
 		$res_dt = json_decode($response);
 		if($res_dt->suc > 0){
-			// Convert the hex string to binary
-			$binaryBuffer = hex2bin($res_dt->msg);
+			// HASHED DATA SET FROM API //
+			// // Convert the hex string to binary
+			// $binaryBuffer = hex2bin($res_dt->msg);
 
-			// Convert the binary data to UTF-8 string
-			$string = utf8_decode($binaryBuffer);
+			// // Convert the binary data to UTF-8 string
+			// $string = utf8_decode($binaryBuffer);
+			// END //
+			$string = json_encode($res_dt->msg);
 			echo $string;
 		}else{
 			echo 'Something wents wrong';
@@ -89,12 +99,16 @@ class Mandate extends CI_Controller {
 
 	function save_data_to_orcl($data_arr){
 		// Convert the JSON string to a buffer
-		$buffer = utf8_encode(json_encode($data_arr));
+		// $buffer = utf8_encode(json_encode($data_arr));
 
-		$hexBuffer = bin2hex($buffer);
+		// $hexBuffer = bin2hex($buffer);
+
+		// $req_data = array(
+		// 	"data" => $hexBuffer
+		// );
 
 		$req_data = array(
-			"data" => $hexBuffer
+			"data" => $data_arr
 		);
 
 		$curl = curl_init();
@@ -121,11 +135,11 @@ class Mandate extends CI_Controller {
 		$res_dt = json_decode($response);
 		if($res_dt->suc > 0){
 			// Convert the hex string to binary
-			$binaryBuffer = hex2bin($res_dt->msg);
+			// $binaryBuffer = hex2bin($res_dt->msg);
 
-			// Convert the binary data to UTF-8 string
-			$string = utf8_decode($binaryBuffer);
-			$response = json_decode($string);
+			// // Convert the binary data to UTF-8 string
+			// $string = utf8_decode($binaryBuffer);
+			// $response = json_decode($string);
 			echo true;
 		}else{
 			echo false;
@@ -147,6 +161,8 @@ class Mandate extends CI_Controller {
             $loan_id = $dec_data['loan_id'];
             $cust_id = $dec_data['cust_id'];
             $resp_msg = $dec_data['msg'];
+			$flag = $dec_data['flag'];
+			$cust_name = $dec_data['cust_name'];
 
 			// $loan_id = $dec_data->loan_id;
             // $cust_id = $dec_data->cust_id;
@@ -161,6 +177,7 @@ class Mandate extends CI_Controller {
             if(is_array($resp_msg_arr)){
                 $tnx_dt_arr = array(
                     "cust_id" => $cust_id,
+					"cust_name" => $cust_name,
                     "loan_id" => $loan_id,
                     "txn_status" => $resp_msg_arr[0],
                     "txn_msg" => $resp_msg_arr[1],
@@ -183,14 +200,14 @@ class Mandate extends CI_Controller {
 					"flag" => 0
 				);
 				// var_dump($api_data_orc);exit;
-				$orc_save = $this->save_data_to_orcl($api_data_orc);
 				// var_dump($orc_save);exit;
+				$orc_save = $this->save_data_to_orcl($api_data_orc);
 
                 if($this->transaction_model->tnx_save($tnx_dt_arr)){
 					switch ($resp_msg_arr[0]) {
 						case '0300':
 							$this->session->set_flashdata('title', 'eMandate Registration');
-							$this->session->set_flashdata('msg', 'Successfully Registered! <br> Your UMRNNumber is '.$tnx_dt_arr['umrn_number']);
+							$this->session->set_flashdata('msg', 'Successfully Registered! \n Your UMRNNumber is '.$tnx_dt_arr['umrn_number']);
 							$this->session->set_flashdata('status', 'success');
 							break;
 						case '0398':
@@ -217,24 +234,41 @@ class Mandate extends CI_Controller {
 						default:
 							break;
 					}
-					redirect('emandate');
+					if($flag == 'I')
+						redirect('emandate');
+					else
+						redirect('manreg');
                 }else{
 					$this->session->set_flashdata('title', 'eMandate Registration');
                     $this->session->set_flashdata('msg', "Error occurs while saving data.");
                     $this->session->set_flashdata('msg', 'error');
-					redirect('emandate');
+					if($flag == 'I')
+						redirect('emandate');
+					else
+						redirect('manreg');
                 }
             }else{
                 throw new Exception("Error Processing Request", 1);
-				redirect('emandate');
+				if($flag == 'I')
+					redirect('emandate');
+				else
+					redirect('manreg');
             }
         } catch (\Throwable $th) {
             var_dump($th); exit;
         }
     }
 
-	function mandate_verification_view(){
+	function mandate_entry_outside(){
+		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+   		$txnId = substr(str_shuffle($characters), 0, 10);
 
+        $data = array(
+            'header' => 'eMandate Registration',
+			'tnxId' => $txnId,
+			'flag' => 'O'
+        );
+		$this->load->view('eMandate/entry_out', array('data' => $data));
 	}
 }
 ?>

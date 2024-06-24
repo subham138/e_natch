@@ -21,11 +21,13 @@
   <!-- inject:css -->
   <link rel="stylesheet" href="<?= base_url() ?>assets/css/vertical-layout-light/style.css">
   <!-- endinject -->
-  <link rel="shortcut icon" href="<?= base_url() ?>assets/images/favicon.png" />
+  <link rel="shortcut icon" href="<?= base_url() ?>assets/images/favicon.ico" />
   
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.1/dist/sweetalert2.all.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.1/dist/sweetalert2.min.css" rel="stylesheet">
   <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom-style.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <script>

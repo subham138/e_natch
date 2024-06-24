@@ -15,8 +15,20 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" href="<?= site_url() ?>/emv_view">
-                <i class="mdi mdi-account-settings menu-icon"></i>
+                <i class="mdi mdi-library menu-icon"></i>
                 <span class="menu-title">Mandate Verification</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= site_url() ?>/man_report">
+                <i class="mdi mdi-note-multiple menu-icon"></i>
+                <span class="menu-title">Registration Report</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= site_url() ?>/log_out">
+                <i class="mdi mdi-logout menu-icon"></i>
+                <span class="menu-title">Log Out</span>
             </a>
         </li>
         <!-- <li class="nav-item">

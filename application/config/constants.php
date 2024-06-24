@@ -85,7 +85,9 @@ defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automat
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 define('SALT_KEY', '1928994908MFINNK');
-define('MERCHANT_CODE', 'T1016979');
+// define('MERCHANT_CODE', 'T1016979');
+define('MERCHANT_CODE', 'L1016979');
 define('SCHEME_CODE', 'FIRST');
-define('API_URL', 'http://localhost:3000');
+// define('API_URL', 'http://localhost:3000');
+define('API_URL', 'https://nach.wbscardb.com');
 define('API_AUTH_KEY', '21ea69356c738060b4cc105df661c89e5af40264fe42c52346741ceef0bf1a212aed4ebf731999891757c1509306de5a');

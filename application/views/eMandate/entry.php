@@ -14,11 +14,11 @@
                         <input type="text" class="form-control form-control-sm" id="consumer_id" name="consumer_id" placeholder="Enter your consumer id">
                     </div>
                     <div class="col-md-4">
-                        <label for="cust_name" class="form-label">Consumer Name <span class="text-danger">*</span></label>
+                        <label for="cust_name" class="form-label">Customer Name <span class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-sm" id="cust_name" name="cust_name" placeholder="Enter your consumer Name">
                     </div>
                     <div class="col-md-4">
-                        <label for="cust_id" class="form-label">Consumer ID <span class="text-danger">*</span></label>
+                        <label for="cust_id" class="form-label">Customer ID <span class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-sm" id="cust_id" name="cust_id" placeholder="Enter your consumer ID">
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                         <input type="email" class="form-control form-control-sm" id="email" name="email" placeholder="Enter your email id">
                     </div>
                     <div class="col-md-4">
-                        <label for="reg_amt" class="form-label">Registration Amount <span class="text-danger">*</span></label>
+                        <label for="reg_amt" class="form-label">Loan Amount <span class="text-danger">*</span></label>
                         <input type="number" class="form-control form-control-sm" id="reg_amt" name="reg_amt" placeholder="Enter registration amount">
                     </div>
                 </div>
@@ -103,11 +103,11 @@ $(document).ready(function() {
             "consumerData": {
                 "deviceId": "WEBSH2",    //possible values "WEBSH1" or "WEBSH2"
                 "token": $('#token').val().toString(),
-                "returnUrl": "<?= site_url() ?>/tnx_resp?loan_id="+$('#consumer_id').val()+"&cust_id="+$('#cust_id').val()+"&tnx_id=<?= $tnxId ?>",
+                "returnUrl": "<?= site_url() ?>/tnx_resp?loan_id="+$('#consumer_id').val()+"&cust_id="+$('#cust_id').val()+"&tnx_id=<?= $tnxId ?>&flag=<?= $flag ?>&cust_name="+$('#cust_name').val(),
                 "responseHandler": handleResponse,
-                "paymentMode": "all",
+                "paymentMode": "netBanking",
                 "merchantLogoUrl": "https://www.wbscardb.com/wp-content/themes/WBSCARDB-child/assets/images/logo.png",  //provided merchant logo will be displayed
-                "merchantId": "T1016979",
+                "merchantId": "<?= MERCHANT_CODE ?>",
                 "currency": "INR",
                 "consumerId": $('#consumer_id').val(),//"c964634",  //Your unique consumer identifier to register a eMandate/eNACH
                 "consumerMobileNo": $('#mobile_no').val(),//"9876543210",
@@ -205,6 +205,22 @@ $(document).ready(function() {
 		});
 	})
 
+    function dateCalculator(st_dt, end_dt){
+        var strt_date = new Date(st_dt),
+        end_date = new Date(end_dt),
+        curr_dt = new Date();
+        var end_dt = new Date(curr_dt.getFullYear(), curr_dt.getMonth()+1, 0)
+        if(end_date.getTime() > curr_dt.getTime()){
+            if(strt_date.getTime() > curr_dt.getTime()){
+                return st_dt
+            }else{
+                return end_dt
+            }
+        }else{
+            return end_dt
+        }
+    }
+
     $('#consumer_id').on('change', function(){
 		$.ajax({
 		    type: "POST",
@@ -219,13 +235,14 @@ $(document).ready(function() {
 		    success: function (result) {
                 try{
                     var res = JSON.parse(result)
+                    var str_dt = dateCalculator(res.FIRST_DUE_DT, res.DEBIT_END_DT)
                     $('#cust_id').val(res.CUST_CD ? res.CUST_CD : '')
                     $('#cust_name').val(res.CUST_NAME ? res.CUST_NAME : '')
                     $('#email').val(res.EMAIL ? res.EMAIL : '')
                     $('#mobile_no').val(res.PHONE ? res.PHONE : '')
                     $('#bebit_amt').val(10)
                     $('#reg_amt').val(res.REG_AMT ? res.REG_AMT : '')
-                    $('#strt_dt').val(formatDateYMD(res.FIRST_DUE_DT))
+                    $('#strt_dt').val(formatDateYMD(str_dt))
                     $('#end_dt').val(formatDateYMD(res.DEBIT_END_DT))
                     console.log(result);
                 }catch(err){
